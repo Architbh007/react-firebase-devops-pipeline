@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # React Firebase Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: react-firebase-app-dev
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_FIREBASE_API_KEY=AIzaSyAOFBYofKi4BBBFgNrbOY-MekVm6a7vk7Y
+      - REACT_APP_FIREBASE_AUTH_DOMAIN=fullstack-2e14f.firebaseapp.com
+      - REACT_APP_FIREBASE_PROJECT_ID=fullstack-2e14f
+      - REACT_APP_FIREBASE_STORAGE_BUCKET=fullstack-2e14f.firebasestorage.app
+      - REACT_APP_FIREBASE_MESSAGING_SENDER_ID=438764839401
+      - REACT_APP_FIREBASE_APP_ID=1:438764839401:web:546a9a44ecbead5be5eb78
+      - REACT_APP_FIREBASE_MEASUREMENT_ID=G-618EH8S1KE
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # Development Database (if needed)
+  db:
+    image: postgres:13-alpine
+    container_name: postgres-dev
+    environment:
+      POSTGRES_DB: devops_pipeline
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
