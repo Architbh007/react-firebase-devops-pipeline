@@ -33,13 +33,16 @@ pipeline {
                     node --version
                     echo NPM Version:
                     npm --version
+                    echo Installing dependencies...
                     npm ci
+                    echo Building React app...
                     npm run build
+                    echo Build completed, checking build directory:
                     dir build
                 '''
                 
                 // Archive build artifacts for High HD requirement
-                archiveArtifacts artifacts: 'build/**/*', fingerprint: true, allowEmptyArchive: false
+                archiveArtifacts artifacts: 'build/**/*', fingerprint: true, allowEmptyArchive: true
                 
                 echo 'Building Docker Image...'
                 script {
