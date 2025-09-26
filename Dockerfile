@@ -1,40 +1,16 @@
-# Multi-stage Dockerfile for High HD DevOps Pipeline
-# Stage 1: Build Environment
-FROM node:18-alpine AS build
+# Production Environment only
+FROM nginx:alpine AS production
 
-# Set working directory
-WORKDIR /app
-
-# Add metadata for better traceability
+# Add metadata for traceability
 LABEL maintainer="DevOps Pipeline"
 LABEL version="1.0"
-LABEL description="React Firebase App - Production Build"
-
-# Copy package files first (for better caching)
-COPY package*.json ./
-
-# Install dependencies (include devDependencies so React can build)
-RUN apk add --no-cache git   # install git if any package needs it
-RUN npm ci --silent
-
-
-# Copy source code
-COPY . .
-
-# Build the React application
-RUN npm run build
-
-# Verify build was successful
-RUN ls -la build/ && echo "✅ Build completed successfully"
-
-# Stage 2: Production Environment
-FROM nginx:alpine AS production
+LABEL description="React Firebase App - Production Runtime"
 
 # Install curl for health checks
 RUN apk --no-cache add curl
 
-# Copy build files from build stage
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy prebuilt React app from Jenkins build output
+COPY build/ /usr/share/nginx/html
 
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -48,7 +24,7 @@ EXPOSE 80
 
 # Add health check endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost/health || exit 1
+    CMD curl -f http://localhost/ || exit 1
 
 # Add startup script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
