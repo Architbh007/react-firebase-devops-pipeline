@@ -29,7 +29,7 @@ pipeline {
             steps {
                 echo 'Building React Application...'
                 bat '''
-                    cd 7.1P
+                    
                     echo Node Version: 
                     node --version
                     echo NPM Version:
