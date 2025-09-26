@@ -13,8 +13,10 @@ LABEL description="React Firebase App - Production Build"
 # Copy package files first (for better caching)
 COPY package*.json ./
 
-# Install dependencies with clean install
-RUN npm ci --only=production --silent
+# Install dependencies (include devDependencies so React can build)
+RUN apk add --no-cache git   # install git if any package needs it
+RUN npm ci --silent
+
 
 # Copy source code
 COPY . .
