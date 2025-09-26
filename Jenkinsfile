@@ -29,17 +29,27 @@ pipeline {
             steps {
                 echo 'Building React Application...'
                 bat '''
-                    
-                    echo Node Version: 
-                    node --version
-                    echo NPM Version:
-                    npm --version
-                    echo Installing dependencies...
-                    npm ci
-                    echo Building React app...
-                    npm run build
-                    echo Build completed, checking build directory:
-                    dir build
+                    echo Node Version:
+    node --version
+    echo NPM Version:
+    npm --version
+
+    echo Installing dependencies...
+    if exist package-lock.json (
+        npm ci || exit /b 1
+    ) else (
+        npm install || exit /b 1
+    )
+
+    echo Building React app...
+    npm run build || exit /b 1
+
+    echo Build completed, checking build directory:
+    if not exist build (
+        echo ERROR: build directory missing
+        exit /b 1
+    )
+    dir buil
                 '''
                 
                 // Archive build artifacts for High HD requirement
