@@ -34,7 +34,7 @@ pipeline {
                 bat 'echo NPM Version:'
                 bat 'npm --version'
                 bat 'echo Installing dependencies...'
-                bat 'npm ci'
+                bat 'npm install'
                 bat 'echo Building React app...'
                 bat 'npm run build'
                 bat 'echo Build completed, checking build directory:'
