@@ -17,12 +17,13 @@ export default [
         document: 'readonly',
         console: 'readonly',
         process: 'readonly',
-        require: 'readonly',
-        module: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        global: 'readonly',
-        Buffer: 'readonly'
+        localStorage: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        performance: 'readonly',
+        fetch: 'readonly'
       }
     },
     rules: {
@@ -42,7 +43,8 @@ export default [
         it: 'readonly',
         beforeEach: 'readonly',
         afterEach: 'readonly',
-        jest: 'readonly'
+        jest: 'readonly',
+        performance: 'readonly'
       }
     }
   }
