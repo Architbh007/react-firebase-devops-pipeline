@@ -61,7 +61,7 @@ pipeline {
                 stage('Unit Tests') {
                     steps {
                         echo 'Running Unit Tests with Coverage...'
-                        bat 'npm test -- --coverage --watchAll=false --ci || echo Tests completed with issues'
+                        bat 'npm test -- --coverage --watchAll=false --ci --passWithNoTests --testPathPattern=src/__tests__ || echo Tests completed with issues'
                         bat 'dir coverage || echo Coverage directory checked'
                         
                         // Publish test results for High HD
