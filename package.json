@@ -1,5 +1,6 @@
 {
   "name": "react-firebase-devops-pipeline",
+  "type": "module",
   "version": "1.0.0",
   "description": "High HD DevOps Pipeline - React Firebase App with Complete CI/CD",
   "private": true,
