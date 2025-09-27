@@ -175,12 +175,7 @@ pipeline {
         }
         
         stage('Release to Production') {
-            when {
-                anyOf {
-                    branch 'main'
-                    branch 'master'
-                }
-            }
+            
             steps {
                 script {
                     def userInput = input(
