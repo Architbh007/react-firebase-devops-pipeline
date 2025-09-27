@@ -114,15 +114,21 @@ pipeline {
         stage('Security Analysis') {
     parallel {
         stage('Dependency Vulnerability Scan') {
-            steps {
-                echo 'Scanning Dependencies for Vulnerabilities...'
-                bat 'npm audit --audit-level moderate --json 1> npm-audit.json || echo Audit completed'
-                bat 'echo Analyzing vulnerability report...'
-                bat 'echo Security scan completed'
-                
-                archiveArtifacts artifacts: 'npm-audit.json', allowEmptyArchive: true
+    steps {
+        echo 'Scanning Dependencies for Vulnerabilities...'
+        script {
+            try {
+                bat 'npm audit --audit-level moderate --json 1> npm-audit.json'
+            } catch (Exception e) {
+                echo "Audit completed with vulnerabilities found - continuing pipeline"
             }
         }
+        bat 'echo Analyzing vulnerability report...'
+        bat 'echo Security scan completed'
+        
+        archiveArtifacts artifacts: 'npm-audit.json', allowEmptyArchive: true
+    }
+}
         
         stage('Static Security Analysis') {
             steps {
