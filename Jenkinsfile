@@ -168,7 +168,7 @@ pipeline {
                     bat 'set IMAGE_TAG=%DOCKER_TAG%'
                     bat 'docker-compose -f docker-compose.staging.yml up -d || echo Staging deployment attempted'
                     bat 'echo Staging deployment completed'
-                    bat 'timeout /t 15 /nobreak'
+                    bat 'ping -n 16 127.0.0.1 >nul'
                     bat 'echo Staging environment validated'
                 }
             }
