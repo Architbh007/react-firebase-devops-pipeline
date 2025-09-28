@@ -40,7 +40,7 @@ pipeline {
                 bat 'echo Build completed, checking build directory:'
                 bat 'dir build'
                 
-                // Archive build artifacts for High HD requirement
+                
                 archiveArtifacts artifacts: 'build/**/*', fingerprint: true, allowEmptyArchive: true
                 
                 echo 'Building Docker Image...'
@@ -64,7 +64,7 @@ pipeline {
                         bat 'npm test -- --coverage --watchAll=false --ci --passWithNoTests --testPathPattern=src/__tests__ || echo Tests completed with issues'
                         bat 'dir coverage || echo Coverage directory checked'
                         
-                        // Publish test results for High HD
+                        // Publish test results 
                         publishHTML([
                             allowMissing: true,
                             alwaysLinkToLastBuild: true,
@@ -134,7 +134,6 @@ pipeline {
             steps {
                 echo 'Running Static Security Analysis...'
                 bat 'echo Running security-focused linting...'
-                // Use regular eslint instead of problematic lint:security
                 bat 'npx eslint src --ext .js,.jsx --format json --output-file security-eslint.json || echo Security lint completed'
                 bat 'echo Static security analysis completed'
                 
@@ -148,7 +147,7 @@ pipeline {
                 script {
                     def imageName = "${DOCKER_IMAGE}:${DOCKER_TAG}"
                     echo "Container security scan completed for ${imageName}"
-                    // Add basic container scan simulation
+                    //basic container scan simulation
                     bat 'echo Simulating container vulnerability scan...'
                     bat 'echo No critical vulnerabilities found in base nginx:alpine image'
                 }
